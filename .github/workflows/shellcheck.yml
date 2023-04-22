@@ -1,0 +1,31 @@
+name: ShellCheck
+uses: redhat-plumbers-in-action/differential-shellcheck@v4.2.1
+
+on:
+  pull_request:
+    types:
+      - opened
+    paths:
+      - '**.sh'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      security-events: write
+
+    steps:
+      - name: Repository checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - id: ShellCheck
+        name: Differential ShellCheck
+        uses: redhat-plumbers-in-action/differential-shellcheck@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

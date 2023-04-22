@@ -1,3 +1,9 @@
+# to insure that the shellscripts are portable
+shell=sh
+
+# allows shellcheck to open other files
 external-sources=true
+
+# disable warnings about non-consistent sources
 disable=1090
 disable=1091

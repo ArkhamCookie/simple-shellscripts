@@ -1,0 +1,36 @@
+#!/bin/sh
+
+usage() {
+	printf "script-install - Simple POSIX script to install shell scripts\n"
+	printf "\n"
+	printf "Usage: script-install [-u|--user] [-l|--local] SCRIPT\n"
+	printf "\n"
+	printf "Available options:\n"
+	printf "\t-h --help\t\tPrint this message\n"
+	printf "\t-u --user\t\tInstall SCRIPT in current user's bin\n"
+	printf "\t-l --local\t\tInstall to the system's local bin (default is '/usr/local/bin')\n"
+	printf "\tSCRIPT\t\t\tName of the script to install\n"
+}
+
+script_install() {
+	[ -z "$target" ] && target=user
+	SCRIPT="$1"
+
+	case "$target" in
+		'user')
+			cp ./"$SCRIPT".sh "$HOME"/.local/bin/"$SCRIPT" || return 1
+		;;
+		'system')
+			cp ./"$SCRIPT".sh /usr/local/bin/"$SCRIPT" || return 1
+		;;
+		*)
+			printf "Invaild target.\n"
+			exit 1
+		;;
+	esac
+}
+
+case "$#" in
+	0) usage ; exit 0 ;;
+	*) script_install "$@" ;;
+esac

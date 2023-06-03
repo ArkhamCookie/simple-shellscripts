@@ -1,0 +1,57 @@
+#!/bin/sh
+
+usage() {
+	printf "script-install - Simple POSIX script to install shell scripts\n"
+	printf "\n"
+	printf "Usage: script-install [info] SCRIPT [-u|--user] [-a|--alias] [-l|--local]\n"
+	printf "\n"
+	printf "Available options:\n"
+	printf "\t-h\t\t\tPrint this message\n"
+	printf "\t--help\t\t\tPrint a more detailed help message\n"
+	printf "\n"
+	printf "\tinfo SCRIPT\t\tShow infomation about SCRIPT\n"
+	printf "\tinfo [ls/list]\t\tList avaiable scripts.\n"
+	printf "\n"
+	printf "\tSCRIPT\t\t\tName of the script to install\n"
+	printf "\t-u --user\t\tInstall SCRIPT in current user's bin\n"
+	printf "\t-a --alias\t\tAdd SCRIPT as an alias\n"
+	printf "\t-l --local\t\tInstall to the system's local bin (default is '/usr/local/bin')\n"
+}
+
+# script_info() {
+	# 
+# }
+
+script_install() {
+	[ -z "$target" ] && target=user
+	SCRIPT="$1"
+
+	if [ ! -f ./scripts/"$SCRIPT" ]; then
+		printf "Error: %s not found.\n" "$SCRIPT"
+		exit 1
+	fi
+
+	case "$target" in
+		'user')
+			cp ./scripts/"$SCRIPT".sh "$HOME"/.local/bin/"$SCRIPT" || return 1
+		;;
+		'system')
+			cp ./scripts/"$SCRIPT".sh /usr/local/bin/"$SCRIPT" || return 1
+		;;
+		*)
+			printf "Invaild target.\n"
+			exit 1
+		;;
+	esac
+}
+
+if [ "$#" = 0 ]; then
+	usage
+	exit 0
+elif [ "$1" = 'info' ]; then
+	script_info "$@"
+else
+	script_install "$@"
+fi
+
+

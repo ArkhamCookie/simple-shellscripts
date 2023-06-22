@@ -5,11 +5,6 @@ if [ ! "$(command -v shellcheck)" ]; then
 	exit 10
 fi
 
-if [ ! "$(command -v shellcheck)" ]; then
-	printf "Error: jq is not installed.\n"
-	exit 10
-fi
-
 usage() {
 	case "$1" in
 		'filter')
